@@ -158,3 +158,8 @@ The repository is structured for GitHub, Zenodo, OpenAIRE, DOI synchronization, 
 Katrina Pietroniro™. *SOVRINT™ Research Validation Layer: Runtime Integrity, Correction Benchmarks, and Synthetic Telemetry Evidence Package.* DOI: 10.5281/zenodo.20278720 (owner-recorded; landing page not independently verified in this audit).
 
 © 2026 Katrina Pietroniro™. All Rights Reserved.
+
+
+## Research status and evidence
+
+See [RESEARCH_STATUS.yaml](./RESEARCH_STATUS.yaml) for the version, release, DOI, evidence class, validation state, source-register guidance, and rights metadata. Update that record when those facts change. Cite sources beside claims that depend on them; citation alone does not grant reuse permission.
