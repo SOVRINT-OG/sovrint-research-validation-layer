@@ -1,7 +1,12 @@
-# CI Runner Status
+# CI Runner Status Snapshot
 
-**Observed:** 2026-06-26  
-**Repository:** `katrinapietro05-design/sovrint-research-validation-layer`
+**Source repository:** `katrinapietro05-design/sovrint-research-validation-layer`  
+**Source observation date:** 2026-06-26  
+**Mirrored into this repository:** 2026-10-12
+
+The following diagnostic and status note was copied from the source repository as a historical reference. It reports the runner state observed in the personal source repository on 2026-06-26. It does not establish the current GitHub Actions or runner status of this organization repository. Check this repository's Actions page before treating that diagnostic as current.
+
+---
 
 ## Diagnostic result
 
@@ -32,3 +37,4 @@ python3 -m unittest discover -s tests -v
 ```
 
 The deterministic fixture logic was independently checked against all eight declared outcomes before merge preparation. The repository must not claim a completed GitHub-hosted validation run until a manual workflow completes successfully.
+
