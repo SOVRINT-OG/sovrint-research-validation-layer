@@ -12,7 +12,7 @@ evidence:
   validation_status: "GitHub Actions on 2026-10-12: 8/8 synthetic replay expectations matched and 5 unit tests passed; no empirical validation claimed"
   empirical_validation_claimed: false
 sources:
-  source_register: "Repository-local sources and attribution are recorded in the README and source files; cite external sources beside sourced claims."
+  source_register: "Record sources and attribution beside sourced content in README or source files; cite external references beside claims that depend on them."
 rights:
   notice: "SOVRINT_LICENSE.md"
   research_citation_required: true
