@@ -9,7 +9,7 @@ publication:
   doi_status: "owner-recorded; landing page not independently verified"
 evidence:
   class: "synthetic-test-suite"
-  validation_status: "source repository records 5 unit tests and 8 replay expectations passing on 2026-06-26; CI rerun pending"
+  validation_status: "GitHub Actions on 2026-10-12: 8/8 synthetic replay expectations matched and 5 unit tests passed; no empirical validation claimed"
   empirical_validation_claimed: false
 sources:
   source_register: "Repository-local sources and attribution are recorded in the README and source files; cite external sources beside sourced claims."
