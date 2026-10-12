@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/katrinapietro05-design/sovrint-research-validation-layer/schemas/equation-record.schema.json",
+  "title": "SOVRINT Equation Record",
+  "description": "Validation schema for preserving authored equations without alteration.",
+  "type": "object",
+  "required": [
+    "equation_id",
+    "author",
+    "exact_transcription",
+    "status",
+    "source_id"
+  ],
+  "properties": {
+    "equation_id": {
+      "type": "string",
+      "pattern": "^EQ-[0-9]{3,}$"
+    },
+    "author": {
+      "const": "Katrina Pietroniro"
+    },
+    "exact_transcription": {
+      "type": "string",
+      "minLength": 1
+    },
+    "designation": {
+      "type": ["string", "null"]
+    },
+    "status": {
+      "enum": [
+        "LOCKED",
+        "SYMBOL_LOCKED_DEFINITION_PENDING",
+        "PROVISIONAL",
+        "REJECTED"
+      ]
+    },
+    "source_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "original_timestamp": {
+      "type": ["string", "null"]
+    },
+    "consolidation_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}
