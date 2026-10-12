@@ -1,0 +1,32 @@
+{
+  "model_id": "SOVRINT-RVL-GOV-STATE-V1",
+  "status": "PROVISIONAL_TEST_MODEL",
+  "canonical": false,
+  "author": "Katrina Pietroniro",
+  "purpose": "Validate bounded runtime transitions without defining or modifying canonical equations, theorems, variables, or symbols.",
+  "states": [
+    "OBSERVED",
+    "INFERRED",
+    "FORECAST",
+    "RECOMMENDED",
+    "DECIDED",
+    "EXECUTED"
+  ],
+  "allowed_transitions": {
+    "OBSERVED": ["OBSERVED", "INFERRED"],
+    "INFERRED": ["INFERRED", "FORECAST"],
+    "FORECAST": ["FORECAST", "RECOMMENDED"],
+    "RECOMMENDED": ["RECOMMENDED", "DECIDED"],
+    "DECIDED": ["DECIDED", "EXECUTED"],
+    "EXECUTED": ["EXECUTED"]
+  },
+  "rules": {
+    "evidence_required": true,
+    "provenance_required": true,
+    "consent_gate_states": ["DECIDED", "EXECUTED"],
+    "correction_requires_authorization": true,
+    "correction_must_be_bounded": true,
+    "archive_instead_of_delete": true
+  },
+  "boundary": "This model is a validation scaffold only. It is not a canonical theorem, ontology, universal scientific claim, surveillance model, medical model, or autonomous decision authority."
+}
