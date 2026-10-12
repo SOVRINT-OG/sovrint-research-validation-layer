@@ -1,0 +1,39 @@
+{
+  "manifest_version": "1.0.0",
+  "suite_id": "SOVRINT-RVL-SUITE-001",
+  "repository": "katrinapietro05-design/sovrint-research-validation-layer",
+  "author": "Katrina Pietroniro",
+  "doi_lineage": "10.5281/zenodo.20278720",
+  "status": "ACTIVE_REPRODUCIBILITY_SCAFFOLD",
+  "canonical_boundary": {
+    "equations_preserved": true,
+    "equations_interpreted": false,
+    "theorems_promoted": false,
+    "variables_inferred": false,
+    "symbols_redefined": false
+  },
+  "inputs": {
+    "model": "models/governance-state-model.json",
+    "cases": "validation/cases/runtime_integrity_cases.json",
+    "case_schema": "schemas/validation-case.schema.json",
+    "equation_registry": "registry/EQ_BIBLE_OMEGA.md"
+  },
+  "execution": {
+    "command": "python replay/run_replay.py",
+    "tests": "python -m unittest discover -s tests -v",
+    "output": "reports/latest_validation_results.json",
+    "dependencies": "Python standard library only"
+  },
+  "validation_dimensions": [
+    "fixture classification",
+    "state-transition legality",
+    "evidence presence",
+    "provenance completeness",
+    "consent gates",
+    "correction bounds",
+    "correction authorization",
+    "expected-outcome determinism",
+    "locked-equation transcription presence"
+  ],
+  "publication_boundary": "Only synthetic fixtures and publication-safe validation artifacts are included."
+}
