@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/katrinapietro05-design/sovrint-research-validation-layer/schemas/validation-case.schema.json",
+  "title": "SOVRINT Research Validation Case",
+  "description": "Schema for non-canonical runtime validation fixtures. It does not define or reinterpret any locked SOVRINT equation, theorem, variable, or symbol.",
+  "type": "object",
+  "required": [
+    "case_id",
+    "title",
+    "classification",
+    "status_path",
+    "evidence",
+    "provenance",
+    "consent_required",
+    "consent_present",
+    "correction",
+    "expected_valid"
+  ],
+  "properties": {
+    "case_id": { "type": "string", "pattern": "^VAL-[0-9]{3,}$" },
+    "title": { "type": "string", "minLength": 1 },
+    "classification": { "const": "NON_CANONICAL_SYNTHETIC_FIXTURE" },
+    "status_path": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "enum": ["OBSERVED", "INFERRED", "FORECAST", "RECOMMENDED", "DECIDED", "EXECUTED"]
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["source_type", "source_reference", "captured_at"],
+      "properties": {
+        "source_type": { "enum": ["synthetic", "authored", "external"] },
+        "source_reference": { "type": "string", "minLength": 1 },
+        "captured_at": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    },
+    "consent_required": { "type": "boolean" },
+    "consent_present": { "type": "boolean" },
+    "correction": {
+      "type": "object",
+      "required": ["requested", "bounded", "authorized", "target"],
+      "properties": {
+        "requested": { "type": "boolean" },
+        "bounded": { "type": "boolean" },
+        "authorized": { "type": "boolean" },
+        "target": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "expected_valid": { "type": "boolean" },
+    "expected_codes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}
