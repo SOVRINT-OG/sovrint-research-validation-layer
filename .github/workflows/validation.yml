@@ -1,0 +1,52 @@
+name: Research Validation Layer
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  TARGET_SHA: ${{ github.sha }}
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Confirm runner and Python
+        run: |
+          echo "runner-ready"
+          python3 --version
+          git --version
+
+      - name: Checkout repository without external actions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git init .
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git fetch --no-tags --depth=1 origin "${TARGET_SHA}"
+          git checkout --detach FETCH_HEAD
+
+      - name: Compile validation code
+        run: python3 -m compileall -q validation replay tests
+
+      - name: Validate JSON artifacts
+        run: |
+          python3 -m json.tool schemas/equation-record.schema.json > /dev/null
+          python3 -m json.tool schemas/validation-case.schema.json > /dev/null
+          python3 -m json.tool models/governance-state-model.json > /dev/null
+          python3 -m json.tool validation/cases/runtime_integrity_cases.json > /dev/null
+          python3 -m json.tool manifests/validation-suite-v1.json > /dev/null
+          python3 -m json.tool notebooks/reproducibility_walkthrough.ipynb > /dev/null
+
+      - name: Run deterministic replay
+        run: |
+          python3 replay/run_replay.py
+          test -s reports/latest_validation_results.json
+          python3 -m json.tool reports/latest_validation_results.json > /dev/null
+          grep -q '"suite_passed": true' reports/latest_validation_results.json
+
+      - name: Run unit tests
+        run: python3 -m unittest discover -s tests -v
