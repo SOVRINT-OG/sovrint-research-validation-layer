@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import copy
 import unittest
 from pathlib import Path
 
@@ -41,6 +42,42 @@ class ValidationEngineTests(unittest.TestCase):
         promoted["canonical"] = True
         with self.assertRaises(ValidationInputError):
             run_suite(self.suite, promoted)
+
+    def test_empty_suite_is_rejected(self) -> None:
+        with self.assertRaises(ValidationInputError):
+            run_suite({"cases": []}, self.model)
+
+    def test_malformed_cases_are_never_silently_discarded(self) -> None:
+        for bad in (None, "invalid", 1, [], True):
+            with self.subTest(case=bad):
+                mixed = {**self.suite, "cases": [self.suite["cases"][0], bad]}
+                with self.assertRaises(ValidationInputError):
+                    run_suite(mixed, self.model)
+
+    def test_duplicate_case_ids_are_rejected(self) -> None:
+        with self.assertRaises(ValidationInputError):
+            run_suite({"cases": [self.suite["cases"][0]] * 2}, self.model)
+
+    def test_expected_valid_requires_a_real_boolean(self) -> None:
+        for value in ("false", 0, 1, None, []):
+            with self.subTest(value=value):
+                suite = copy.deepcopy(self.suite)
+                suite["cases"][0]["expected_valid"] = value
+                with self.assertRaises(ValidationInputError):
+                    run_suite(suite, self.model)
+
+    def test_malformed_expected_codes_are_rejected(self) -> None:
+        for value in ("CODE", [1], [None], [""], {}):
+            with self.subTest(value=value):
+                suite = copy.deepcopy(self.suite)
+                suite["cases"][0]["expected_codes"] = value
+                with self.assertRaises(ValidationInputError):
+                    run_suite(suite, self.model)
+
+    def test_top_level_values_must_be_objects(self) -> None:
+        for suite, model in (([], self.model), (self.suite, [])):
+            with self.assertRaises(ValidationInputError):
+                run_suite(suite, model)
 
     def test_each_fixture_is_explicitly_noncanonical(self) -> None:
         for case in self.suite["cases"]:

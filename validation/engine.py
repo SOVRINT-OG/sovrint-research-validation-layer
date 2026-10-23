@@ -192,16 +192,34 @@ def validate_case(case: dict[str, Any], model: dict[str, Any]) -> CaseResult:
 
 
 def run_suite(suite: dict[str, Any], model: dict[str, Any]) -> dict[str, Any]:
+    if not isinstance(suite, dict) or not isinstance(model, dict):
+        raise ValidationInputError("Suite and model must be JSON objects.")
     if model.get("canonical") is not False or model.get("status") != "PROVISIONAL_TEST_MODEL":
         raise ValidationInputError(
             "The runtime validator only accepts models explicitly marked non-canonical and provisional."
         )
 
     cases = suite.get("cases")
-    if not isinstance(cases, list):
-        raise ValidationInputError("Validation suite must contain a 'cases' list.")
+    if not isinstance(cases, list) or not cases:
+        raise ValidationInputError("Validation suite must contain a non-empty 'cases' list.")
 
-    results = [validate_case(case, model) for case in cases if isinstance(case, dict)]
+    identifiers: set[str] = set()
+    for index, case in enumerate(cases):
+        if not isinstance(case, dict):
+            raise ValidationInputError(f"cases[{index}] must be a JSON object.")
+        identifier = case.get("case_id")
+        if not isinstance(identifier, str) or not identifier.strip():
+            raise ValidationInputError(f"cases[{index}].case_id must be a non-empty string.")
+        if identifier in identifiers:
+            raise ValidationInputError(f"Duplicate case_id: {identifier}")
+        identifiers.add(identifier)
+        if type(case.get("expected_valid")) is not bool:
+            raise ValidationInputError(f"cases[{index}].expected_valid must be a boolean.")
+        codes = case.get("expected_codes", [])
+        if not isinstance(codes, list) or any(not isinstance(code, str) or not code for code in codes):
+            raise ValidationInputError(f"cases[{index}].expected_codes must be a list of non-empty strings.")
+
+    results = [validate_case(case, model) for case in cases]
     matched = sum(result.expectation_matched for result in results)
     valid_cases = sum(result.valid for result in results)
     invalid_cases = len(results) - valid_cases
